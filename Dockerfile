@@ -1,12 +1,16 @@
 FROM bitnami/postgresql:latest
 
+# list port for documentation purposes
 EXPOSE 5432
 
-ENV POSTGRES_USER=docker
-ENV POSTGRES_PASSWORD=docker
-ENV POSTGRES_DB=docker
+# volume mount for local storage
+VOLUME pgdata
 
-VOLUME /bitnami/postgresql
-
+# copy init script into container
 COPY ./init.sql /docker-entrypoint-initdb.d/init.sql
 
+# default entrypoint
+ENTRYPOINT ["/opt/bitnami/scripts/postgresql/entrypoint.sh"]
+
+# start postgres server
+CMD ["/opt/bitnami/scripts/postgresql/run.sh"]
